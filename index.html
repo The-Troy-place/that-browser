@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -16,6 +15,7 @@
   --text-dim: #9a9da6;
   --accent: #4f8cff;
   --danger: #ff6b6b;
+  --success: #5bd68a;
 
   font-family:
     -apple-system,
@@ -33,24 +33,30 @@
 
 html,
 body {
-  margin: 0;
   width: 100%;
-  min-height: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
   background: transparent;
-}
-
-body {
   overflow: hidden;
 }
 
+body {
+  display: flex;
+}
+
+button,
+input {
+  font: inherit;
+}
+
 .sandbox-browser {
-  position: relative;
   display: flex;
   flex-direction: column;
 
   width: 100%;
   height: 100vh;
-  min-height: 420px;
+  min-height: 400px;
 
   background: var(--chrome-bg);
   border: 1px solid var(--border);
@@ -60,15 +66,32 @@ body {
 
   box-shadow:
     0 8px 30px rgba(0, 0, 0, 0.25);
+
+  transition:
+    border-radius 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-/* ------------------------------------------------------------
-   Tabs
------------------------------------------------------------- */
+/* Fullscreen */
+
+.sandbox-browser:fullscreen {
+  width: 100vw;
+  height: 100vh;
+
+  border: 0;
+  border-radius: 0;
+
+  box-shadow: none;
+}
+
+/* --------------------------------------------------
+   TABS
+-------------------------------------------------- */
 
 .tab-strip {
   display: flex;
   align-items: flex-end;
+
   gap: 4px;
 
   min-height: 38px;
@@ -81,7 +104,8 @@ body {
   background: var(--chrome-bg);
 
   border-bottom:
-    1px solid var(--border);
+    1px solid
+    var(--border);
 
   overflow-x: auto;
   overflow-y: hidden;
@@ -95,19 +119,17 @@ body {
 
 .tab-strip::-webkit-scrollbar-thumb {
   background: var(--border);
-  border-radius: 999px;
+  border-radius: 20px;
 }
 
 .tab {
-  position: relative;
-
   display: flex;
   align-items: center;
 
   gap: 8px;
 
   min-width: 120px;
-  max-width: 220px;
+  max-width: 240px;
 
   height: 33px;
 
@@ -116,7 +138,8 @@ body {
     10px;
 
   border:
-    1px solid var(--border);
+    1px solid
+    var(--border);
 
   border-bottom: none;
 
@@ -134,7 +157,7 @@ body {
 
   user-select: none;
 
-  flex: 0 1 auto;
+  flex: 0 0 auto;
 }
 
 .tab.active {
@@ -162,13 +185,13 @@ body {
 
   border: 0;
 
-  border-radius: 5px;
-
   background: transparent;
 
   color: var(--text-dim);
 
   cursor: pointer;
+
+  border-radius: 4px;
 
   font-size: 16px;
 
@@ -176,7 +199,7 @@ body {
 }
 
 .tab-close:hover {
-  background: rgba(255,255,255,.08);
+  background: rgba(255,255,255,0.08);
   color: var(--text);
 }
 
@@ -187,19 +210,18 @@ body {
   margin-bottom: 2px;
 
   border:
-    1px solid var(--border);
+    1px solid
+    var(--border);
 
   border-radius: 7px;
 
-  background:
-    var(--chrome-bg-2);
+  background: var(--chrome-bg-2);
 
   color: var(--text);
 
   cursor: pointer;
 
-  flex:
-    0 0 auto;
+  flex: 0 0 auto;
 
   font-size: 18px;
 }
@@ -208,9 +230,9 @@ body {
   background: #383c46;
 }
 
-/* ------------------------------------------------------------
-   Toolbar
------------------------------------------------------------- */
+/* --------------------------------------------------
+   TOOLBAR
+-------------------------------------------------- */
 
 .toolbar {
   display: flex;
@@ -219,31 +241,33 @@ body {
   gap: 8px;
 
   padding:
-    9px
-    10px;
+    10px
+    12px;
 
-  background:
-    var(--chrome-bg);
+  background: var(--chrome-bg);
 
   border-bottom:
-    1px solid var(--border);
-
-  flex-shrink: 0;
+    1px solid
+    var(--border);
 }
 
-.nav-btn {
+.nav-btn,
+.fullscreen-btn {
   width: 32px;
   height: 32px;
 
   display: flex;
+
   align-items: center;
   justify-content: center;
 
-  background:
-    var(--chrome-bg-2);
+  flex-shrink: 0;
+
+  background: var(--chrome-bg-2);
 
   border:
-    1px solid var(--border);
+    1px solid
+    var(--border);
 
   border-radius: 7px;
 
@@ -251,15 +275,18 @@ body {
 
   cursor: pointer;
 
-  flex-shrink: 0;
+  transition:
+    background 0.15s ease,
+    opacity 0.15s ease;
 }
 
-.nav-btn:hover:not(:disabled) {
+.nav-btn:hover:not(:disabled),
+.fullscreen-btn:hover {
   background: #383c46;
 }
 
 .nav-btn:disabled {
-  opacity: .35;
+  opacity: 0.35;
   cursor: default;
 }
 
@@ -267,6 +294,10 @@ body {
   width: 16px;
   height: 16px;
 }
+
+/* --------------------------------------------------
+   URL BAR
+-------------------------------------------------- */
 
 .url-form {
   flex: 1;
@@ -279,26 +310,27 @@ body {
 .url-bar-wrap {
   flex: 1;
 
+  min-width: 0;
+
   display: flex;
+
   align-items: center;
 
   gap: 8px;
 
-  height: 34px;
+  height: 32px;
 
   padding:
     0
     12px;
 
-  background:
-    var(--chrome-bg-2);
+  background: var(--chrome-bg-2);
 
   border:
-    1px solid var(--border);
+    1px solid
+    var(--border);
 
   border-radius: 999px;
-
-  min-width: 0;
 }
 
 .url-bar-wrap:focus-within {
@@ -335,11 +367,6 @@ body {
 }
 
 .go-btn {
-  display: flex;
-  align-items: center;
-
-  padding: 2px;
-
   background: none;
 
   border: none;
@@ -347,41 +374,23 @@ body {
   color: var(--text-dim);
 
   cursor: pointer;
+
+  display: flex;
+
+  align-items: center;
+
+  padding: 2px;
+
+  flex-shrink: 0;
 }
 
 .go-btn:hover {
   color: var(--text);
 }
 
-.go-btn svg {
-  width: 16px;
-  height: 16px;
-}
-
-.fullscreen-btn {
-  width: 34px;
-  height: 34px;
-
-  border:
-    1px solid var(--border);
-
-  border-radius: 7px;
-
-  background:
-    var(--chrome-bg-2);
-
-  color: var(--text);
-
-  cursor: pointer;
-
-  flex-shrink: 0;
-
-  font-size: 17px;
-}
-
-.fullscreen-btn:hover {
-  background: #383c46;
-}
+/* --------------------------------------------------
+   STATUS
+-------------------------------------------------- */
 
 .status-dot {
   width: 7px;
@@ -398,7 +407,7 @@ body {
   background: var(--accent);
 
   animation:
-    pulse .9s
+    pulse 0.9s
     ease-in-out
     infinite;
 }
@@ -407,19 +416,24 @@ body {
   background: var(--danger);
 }
 
+.status-dot.success {
+  background: var(--success);
+}
+
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
 
   50% {
-    opacity: .3;
+    opacity: 0.35;
   }
 }
 
-/* ------------------------------------------------------------
-   Viewport
------------------------------------------------------------- */
+/* --------------------------------------------------
+   VIEWPORT
+-------------------------------------------------- */
 
 .viewport {
   position: relative;
@@ -434,76 +448,40 @@ body {
 }
 
 .viewport iframe {
-  display: block;
-
   width: 100%;
   height: 100%;
 
   border: none;
 
-  background: white;
+  display: block;
+
+  background: #fff;
+
+  color-scheme: normal;
 }
 
 /*
- * Loading overlay
- */
+  Permissions important for:
+  - YouTube
+  - HTML5 video
+  - WebGL games
+  - gamepads
+  - fullscreen
+  - encrypted media
+  - camera/microphone capable sites
+*/
 
-.loading-overlay {
-  position: absolute;
-
-  inset: 0;
-
-  z-index: 20;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  pointer-events: none;
-
-  opacity: 0;
-
-  transition: opacity .15s ease;
-
-  background:
-    rgba(22, 23, 27, .35);
+.viewport iframe {
+  touch-action: auto;
 }
 
-.loading-overlay.visible {
-  opacity: 1;
-}
-
-.spinner {
-  width: 30px;
-  height: 30px;
-
-  border:
-    3px solid
-    rgba(255,255,255,.18);
-
-  border-top-color:
-    var(--accent);
-
-  border-radius: 50%;
-
-  animation:
-    spin .7s
-    linear
-    infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* ------------------------------------------------------------
-   Placeholder / error
------------------------------------------------------------- */
+/* --------------------------------------------------
+   PLACEHOLDER / ERROR
+-------------------------------------------------- */
 
 .placeholder,
-.blocked-msg {
+.blocked-msg,
+.loading-msg {
   position: absolute;
 
   inset: 0;
@@ -513,6 +491,7 @@ body {
   flex-direction: column;
 
   align-items: center;
+
   justify-content: center;
 
   text-align: center;
@@ -522,27 +501,30 @@ body {
   color: var(--text-dim);
 
   gap: 10px;
+
+  z-index: 2;
 }
 
 .placeholder svg,
 .blocked-msg svg {
-  width: 42px;
-  height: 42px;
+  width: 40px;
+  height: 40px;
 
-  opacity: .5;
+  opacity: 0.5;
 
   margin-bottom: 6px;
 }
 
 .placeholder p,
-.blocked-msg p {
+.blocked-msg p,
+.loading-msg p {
   margin: 0;
 
   font-size: 13px;
 
   line-height: 1.5;
 
-  max-width: 420px;
+  max-width: 500px;
 }
 
 .blocked-msg .site-name {
@@ -565,7 +547,7 @@ body {
     var(--border);
 
   padding:
-    7px
+    6px
     14px;
 
   border-radius: 999px;
@@ -575,258 +557,86 @@ body {
   border-color: var(--accent);
 }
 
-/* ------------------------------------------------------------
-   Footer
------------------------------------------------------------- */
+/* --------------------------------------------------
+   FOOTER
+-------------------------------------------------- */
 
 .footer-note {
   display: none;
-
-  padding:
-    6px
-    14px;
-
-  font-size: 11px;
-
-  color: var(--text-dim);
-
-  background:
-    var(--chrome-bg);
-
-  border-top:
-    1px solid
-    var(--border);
 }
 
-/*
- * The proxy indicator is intentionally hidden.
- * The browser can therefore look like a normal full-screen browser.
- */
+/* --------------------------------------------------
+   MOBILE
+-------------------------------------------------- */
 
-/* ------------------------------------------------------------
-   Responsive
------------------------------------------------------------- */
+@media (max-width: 600px) {
 
-@media (max-width: 650px) {
+  .sandbox-browser {
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
+  }
+
   .toolbar {
-    gap: 5px;
-
     padding:
-      7px;
+      7px
+      8px;
+
+    gap: 5px;
   }
 
-  .nav-btn {
-    width: 30px;
-    height: 30px;
-  }
-
+  .nav-btn,
   .fullscreen-btn {
     width: 30px;
     height: 30px;
   }
 
   .url-bar-wrap {
-    height: 30px;
-
     padding:
       0
       9px;
   }
 
   .tab {
-    min-width: 105px;
+    min-width: 100px;
   }
-
-  .tab-strip {
-    padding-left: 5px;
-    padding-right: 5px;
-  }
-}
-
-@media (max-width: 450px) {
-  .toolbar {
-    gap: 4px;
-  }
-
-  .nav-btn:nth-child(2) {
-    display: none;
-  }
-
-  .url-bar-wrap {
-    padding-left: 9px;
-    padding-right: 7px;
-  }
-
-  .tab {
-    min-width: 95px;
-  }
-}
-
-/*
- * When fullscreen is active, remove rounded edges.
- */
-
-.sandbox-browser:fullscreen {
-  width: 100vw;
-  height: 100vh;
-
-  border: none;
-
-  border-radius: 0;
 }
 </style>
-
 </head>
 
 <body>
 
-<div
-  class="sandbox-browser"
-  id="sandboxBrowser"
->
+<div class="sandbox-browser" id="sandboxBrowser">
 
-  <!-- ========================================================
+  <!-- =========================
        TABS
-  ========================================================= -->
+  ========================== -->
 
-  <div
-    class="tab-strip"
-    id="tabStrip"
-  >
+  <div class="tab-strip" id="tabStrip">
 
-```
-<button
-  class="new-tab"
-  id="newTabBtn"
-  type="button"
-  title="New tab"
->
-  +
-</button>
-```
+    <button
+      class="new-tab"
+      id="newTabBtn"
+      title="New tab"
+      type="button"
+    >
+      +
+    </button>
 
   </div>
 
-  <!-- ========================================================
+  <!-- =========================
        TOOLBAR
-  ========================================================= -->
+  ========================== -->
 
   <div class="toolbar">
 
-```
-<button
-  class="nav-btn"
-  id="backBtn"
-  type="button"
-  title="Back"
-  disabled
->
-  <svg
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="2"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-  >
-    <path d="M15 18l-6-6 6-6"/>
-  </svg>
-</button>
-
-
-<button
-  class="nav-btn"
-  id="forwardBtn"
-  type="button"
-  title="Forward"
-  disabled
->
-  <svg
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="2"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-  >
-    <path d="M9 18l6-6-6-6"/>
-  </svg>
-</button>
-
-
-<button
-  class="nav-btn"
-  id="reloadBtn"
-  type="button"
-  title="Reload"
->
-  <svg
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="2"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-  >
-    <path d="M23 4v6h-6"/>
-    <path d="M1 20v-6h6"/>
-    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10"/>
-    <path d="M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
-  </svg>
-</button>
-
-
-<form
-  class="url-form"
-  id="urlForm"
->
-
-  <div class="url-bar-wrap">
-
-    <svg
-      class="lock-icon"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    >
-      <rect
-        x="3"
-        y="11"
-        width="18"
-        height="11"
-        rx="2"
-      />
-
-      <path
-        d="M7 11V7a5 5 0 0 1 10 0v4"
-      />
-    </svg>
-
-
-    <input
-      class="url-input"
-      id="urlInput"
-      type="text"
-      placeholder="Search or enter a URL"
-      autocomplete="off"
-      autocapitalize="off"
-      spellcheck="false"
-    >
-
-
-    <span
-      class="status-dot"
-      id="statusDot"
-    ></span>
-
-
     <button
-      class="go-btn"
-      type="submit"
-      title="Go"
+      class="nav-btn"
+      id="backBtn"
+      title="Back"
+      type="button"
+      disabled
     >
       <svg
         viewBox="0 0 24 24"
@@ -836,97 +646,171 @@ body {
         stroke-linecap="round"
         stroke-linejoin="round"
       >
-        <path d="M5 12h14"/>
-        <path d="M13 6l6 6-6 6"/>
+        <path d="M15 18l-6-6 6-6"/>
       </svg>
+    </button>
+
+    <button
+      class="nav-btn"
+      id="forwardBtn"
+      title="Forward"
+      type="button"
+      disabled
+    >
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M9 18l6-6-6-6"/>
+      </svg>
+    </button>
+
+    <button
+      class="nav-btn"
+      id="reloadBtn"
+      title="Reload"
+      type="button"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M23 4v6h-6"/>
+        <path d="M1 20v-6h6"/>
+        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10"/>
+        <path d="M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+      </svg>
+    </button>
+
+    <form
+      class="url-form"
+      id="urlForm"
+    >
+
+      <div class="url-bar-wrap">
+
+        <svg
+          class="lock-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect
+            x="3"
+            y="11"
+            width="18"
+            height="11"
+            rx="2"
+          />
+
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+
+        <input
+          class="url-input"
+          id="urlInput"
+          type="text"
+          placeholder="Enter a URL, e.g. youtube.com"
+          autocomplete="off"
+          spellcheck="false"
+        >
+
+        <span
+          class="status-dot"
+          id="statusDot"
+        ></span>
+
+        <button
+          class="go-btn"
+          type="submit"
+          title="Go"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M5 12h14"/>
+            <path d="M13 6l6 6-6 6"/>
+          </svg>
+        </button>
+
+      </div>
+
+    </form>
+
+    <button
+      class="fullscreen-btn"
+      id="fullscreenBtn"
+      title="Fullscreen"
+      type="button"
+    >
+      ⛶
     </button>
 
   </div>
 
-</form>
-
-
-<button
-  class="fullscreen-btn"
-  id="fullscreenBtn"
-  type="button"
-  title="Fullscreen"
->
-  ⛶
-</button>
-```
-
-  </div>
-
-  <!-- ========================================================
+  <!-- =========================
        VIEWPORT
-  ========================================================= -->
+  ========================== -->
 
   <div
     class="viewport"
     id="viewport"
   >
 
-```
-<div
-  class="placeholder"
-  id="placeholder"
->
+    <div
+      class="placeholder"
+      id="placeholder"
+    >
 
-  <svg
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="1.5"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-  >
-    <circle
-      cx="12"
-      cy="12"
-      r="10"
-    />
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <circle
+          cx="12"
+          cy="12"
+          r="10"
+        />
 
-    <path
-      d="M2 12h20"
-    />
+        <path d="M2 12h20"/>
 
-    <path
-      d="M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"
-    />
-  </svg>
+        <path
+          d="M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"
+        />
+      </svg>
 
-  <p>
-    Enter a URL above to open a website.
-  </p>
+      <p>
+        Enter a URL above to open a website.
+      </p>
 
-</div>
+    </div>
 
-
-<div
-  class="loading-overlay"
-  id="loadingOverlay"
->
-  <div class="spinner"></div>
-</div>
-```
-
-  </div>
-
-  <!-- Hidden intentionally -->
-
-  <div
-    class="footer-note"
-    id="footerNote"
-  >
-    Pages load through the sandbox proxy.
   </div>
 
 </div>
 
 <script>
 (function () {
-  "use strict";
 
   /*
    * ============================================================
@@ -935,7 +819,7 @@ body {
    */
 
   const PROXY_ORIGIN =
-    "https://sandbox-browser-proxy.the-troy-place.workers.dev";
+    'https://sandbox-browser-proxy.the-troy-place.workers.dev';
 
 
   /*
@@ -945,64 +829,37 @@ body {
    */
 
   const browser =
-    document.getElementById(
-      "sandboxBrowser"
-    );
+    document.getElementById('sandboxBrowser');
 
   const tabStrip =
-    document.getElementById(
-      "tabStrip"
-    );
+    document.getElementById('tabStrip');
 
   const newTabBtn =
-    document.getElementById(
-      "newTabBtn"
-    );
+    document.getElementById('newTabBtn');
 
   const viewport =
-    document.getElementById(
-      "viewport"
-    );
+    document.getElementById('viewport');
 
   const urlForm =
-    document.getElementById(
-      "urlForm"
-    );
+    document.getElementById('urlForm');
 
   const urlInput =
-    document.getElementById(
-      "urlInput"
-    );
+    document.getElementById('urlInput');
 
   const backBtn =
-    document.getElementById(
-      "backBtn"
-    );
+    document.getElementById('backBtn');
 
   const forwardBtn =
-    document.getElementById(
-      "forwardBtn"
-    );
+    document.getElementById('forwardBtn');
 
   const reloadBtn =
-    document.getElementById(
-      "reloadBtn"
-    );
+    document.getElementById('reloadBtn');
 
   const fullscreenBtn =
-    document.getElementById(
-      "fullscreenBtn"
-    );
+    document.getElementById('fullscreenBtn');
 
   const statusDot =
-    document.getElementById(
-      "statusDot"
-    );
-
-  const loadingOverlay =
-    document.getElementById(
-      "loadingOverlay"
-    );
+    document.getElementById('statusDot');
 
 
   /*
@@ -1025,120 +882,79 @@ body {
    */
 
   function normalizeUrl(raw) {
+
+    if (!raw) {
+      return null;
+    }
+
     let value =
-      String(raw || "")
-        .trim();
+      raw.trim();
 
     if (!value) {
       return null;
     }
 
     /*
-     * If the user types something like:
+     * Allow users to type:
      *
      * youtube.com
-     *
-     * turn it into:
-     *
+     * www.youtube.com
      * https://youtube.com
      */
 
     if (
-      !/^[a-z][a-z0-9+.-]*:\/\//i.test(
-        value
-      )
+      !/^[a-z][a-z0-9+.-]*:\/\//i.test(value)
     ) {
       value =
-        "https://" +
-        value;
+        'https://' + value;
     }
 
     try {
+
       const url =
         new URL(value);
 
       if (
-        !/^https?:$/i.test(
-          url.protocol
-        )
+        url.protocol !== 'http:' &&
+        url.protocol !== 'https:'
       ) {
         return null;
       }
 
       return url.href;
 
-    } catch {
+    } catch (error) {
+
       return null;
+
     }
+
   }
 
 
   function siteLabel(url) {
+
     try {
+
       return new URL(url).hostname;
-    } catch {
-      return url || "New Tab";
+
+    } catch (error) {
+
+      return url;
+
     }
+
   }
 
 
   function proxiedUrl(url) {
+
     return (
       PROXY_ORIGIN +
-      "/proxy?url=" +
+      '/proxy?url=' +
       encodeURIComponent(url)
     );
-  }
 
-
-  function isProxyUrl(url) {
-    return (
-      typeof url === "string" &&
-      url.indexOf(
-        PROXY_ORIGIN +
-        "/proxy?url="
-      ) === 0
-    );
-  }
-
-
-  /*
-   * The Worker sends proxy URLs in postMessage events.
-   *
-   * Convert them back to the actual target URL before
-   * putting them in our browser history.
-   */
-
-  function unwrapProxyUrl(url) {
-    try {
-      const parsed =
-        new URL(url);
-
-      if (
-        parsed.origin !==
-        PROXY_ORIGIN
-      ) {
-        return url;
-      }
-
-      if (
-        parsed.pathname !==
-        "/proxy"
-      ) {
-        return url;
-      }
-
-      const target =
-        parsed.searchParams.get(
-          "url"
-        );
-
-      return target ||
-        url;
-
-    } catch {
-      return url;
-    }
   }
 
 
@@ -1149,57 +965,44 @@ body {
    */
 
   function setStatus(state) {
+
     statusDot.className =
-      "status-dot" +
-      (
-        state
-          ? " " + state
-          : ""
-      );
-  }
+      'status-dot';
 
-
-  function setLoading(value) {
-    loadingOverlay.classList.toggle(
-      "visible",
-      value
-    );
-
-    if (value) {
-      setStatus("loading");
+    if (state) {
+      statusDot.classList.add(state);
     }
+
   }
 
 
   /*
    * ============================================================
-   * ACTIVE TAB
+   * TAB HELPERS
    * ============================================================
    */
 
   function activeTab() {
+
     return tabs.find(
-      tab =>
-        tab.id ===
-        activeTabId
+      tab => tab.id === activeTabId
     ) || null;
+
   }
 
 
-  /*
-   * ============================================================
-   * NAVIGATION BUTTONS
-   * ============================================================
-   */
-
   function updateNavButtons() {
+
     const tab =
       activeTab();
 
     if (!tab) {
+
       backBtn.disabled = true;
       forwardBtn.disabled = true;
+
       return;
+
     }
 
     backBtn.disabled =
@@ -1208,6 +1011,7 @@ body {
     forwardBtn.disabled =
       tab.historyIndex >=
       tab.history.length - 1;
+
   }
 
 
@@ -1218,128 +1022,98 @@ body {
    */
 
   function renderTabs() {
+
     tabStrip
-      .querySelectorAll(
-        ".tab"
-      )
-      .forEach(
-        el =>
-          el.remove()
+      .querySelectorAll('.tab')
+      .forEach(el => el.remove());
+
+    tabs.forEach(tab => {
+
+      const el =
+        document.createElement('div');
+
+      el.className =
+        'tab' +
+        (
+          tab.id === activeTabId
+            ? ' active'
+            : ''
+        );
+
+      el.dataset.id =
+        String(tab.id);
+
+
+      const title =
+        document.createElement('span');
+
+      title.className =
+        'tab-title';
+
+      title.textContent =
+        tab.title || 'New Tab';
+
+
+      const close =
+        document.createElement('button');
+
+      close.className =
+        'tab-close';
+
+      close.type =
+        'button';
+
+      close.title =
+        'Close tab';
+
+      close.textContent =
+        '×';
+
+
+      el.appendChild(title);
+      el.appendChild(close);
+
+
+      el.addEventListener(
+        'click',
+        function () {
+
+          switchTab(tab.id);
+
+        }
       );
 
-    tabs.forEach(
-      tab => {
-        const el =
-          document.createElement(
-            "div"
-          );
 
-        el.className =
-          "tab" +
-          (
-            tab.id ===
-            activeTabId
-              ? " active"
-              : ""
-          );
+      close.addEventListener(
+        'click',
+        function (event) {
 
-        el.dataset.id =
-          String(tab.id);
+          event.stopPropagation();
+
+          closeTab(tab.id);
+
+        }
+      );
 
 
-        const title =
-          document.createElement(
-            "span"
-          );
+      tabStrip.insertBefore(
+        el,
+        newTabBtn
+      );
 
-        title.className =
-          "tab-title";
+    });
 
-        title.textContent =
-          tab.title ||
-          "New Tab";
-
-
-        const close =
-          document.createElement(
-            "button"
-          );
-
-        close.className =
-          "tab-close";
-
-        close.type =
-          "button";
-
-        close.title =
-          "Close tab";
-
-        close.textContent =
-          "×";
-
-
-        el.appendChild(
-          title
-        );
-
-        el.appendChild(
-          close
-        );
-
-
-        el.addEventListener(
-          "click",
-          () => {
-            switchTab(
-              tab.id
-            );
-          }
-        );
-
-
-        close.addEventListener(
-          "click",
-          event => {
-            event.stopPropagation();
-
-            closeTab(
-              tab.id
-            );
-          }
-        );
-
-
-        tabStrip.insertBefore(
-          el,
-          newTabBtn
-        );
-      }
-    );
   }
 
 
-  function updateTabTitle(
-    tab,
-    url,
-    documentTitle
-  ) {
-    if (
-      documentTitle &&
-      documentTitle.trim()
-    ) {
-      tab.title =
-        documentTitle
-          .trim()
-          .slice(
-            0,
-            60
-          );
-    } else {
-      tab.title =
-        siteLabel(url);
-    }
+  function updateTabTitle(tab, url) {
+
+    tab.title =
+      siteLabel(url) ||
+      'New Tab';
 
     renderTabs();
+
   }
 
 
@@ -1350,24 +1124,14 @@ body {
    */
 
   function showPlaceholder() {
-    viewport
-      .querySelectorAll(
-        "iframe, .placeholder, .blocked-msg"
-      )
-      .forEach(
-        el =>
-          el.remove()
-      );
 
+    viewport.innerHTML = '';
 
     const placeholder =
-      document.createElement(
-        "div"
-      );
+      document.createElement('div');
 
     placeholder.className =
-      "placeholder";
-
+      'placeholder';
 
     placeholder.innerHTML = `
       <svg
@@ -1388,21 +1152,16 @@ body {
       </p>
     `;
 
-
-    viewport.insertBefore(
-      placeholder,
-      loadingOverlay
+    viewport.appendChild(
+      placeholder
     );
 
+    urlInput.value = '';
 
-    urlInput.value =
-      "";
-
-    setStatus("");
-
-    setLoading(false);
+    setStatus('');
 
     updateNavButtons();
+
   }
 
 
@@ -1416,348 +1175,70 @@ body {
     url,
     reason
   ) {
-    viewport
-      .querySelectorAll(
-        "iframe, .placeholder, .blocked-msg"
-      )
-      .forEach(
-        el =>
-          el.remove()
-      );
 
+    viewport.innerHTML = '';
 
     const msg =
-      document.createElement(
-        "div"
-      );
+      document.createElement('div');
 
     msg.className =
-      "blocked-msg";
+      'blocked-msg';
 
 
     const p =
-      document.createElement(
-        "p"
-      );
+      document.createElement('p');
 
 
     const site =
-      document.createElement(
-        "span"
-      );
+      document.createElement('span');
 
     site.className =
-      "site-name";
+      'site-name';
 
     site.textContent =
       siteLabel(url);
 
 
-    p.appendChild(
-      site
-    );
-
+    p.appendChild(site);
 
     p.appendChild(
       document.createTextNode(
-        " could not be loaded through the sandbox." +
+        ' could not be loaded through the sandbox.' +
         (
           reason
-            ? " " + reason
-            : ""
+            ? ' (' + reason + ')'
+            : ''
         )
       )
     );
 
 
-    const external =
-      document.createElement(
-        "a"
-      );
+    const a =
+      document.createElement('a');
 
-    external.className =
-      "open-external";
+    a.className =
+      'open-external';
 
-    external.href =
+    a.href =
       url;
 
-    external.target =
-      "_blank";
+    a.target =
+      '_blank';
 
-    external.rel =
-      "noopener noreferrer";
+    a.rel =
+      'noopener noreferrer';
 
-    external.textContent =
-      "Open externally";
-
-
-    msg.appendChild(
-      p
-    );
-
-    msg.appendChild(
-      external
-    );
+    a.textContent =
+      'Open externally';
 
 
-    viewport.insertBefore(
-      msg,
-      loadingOverlay
-    );
+    msg.appendChild(p);
+    msg.appendChild(a);
 
+    viewport.appendChild(msg);
 
-    setLoading(false);
+    setStatus('error');
 
-    setStatus("error");
-  }
-
-
-  /*
-   * ============================================================
-   * LOAD URL
-   * ============================================================
-   */
-
-  function loadUrl(
-    url,
-    options
-  ) {
-    options =
-      options || {};
-
-
-    const tab =
-      tabs.find(
-        t =>
-          t.id ===
-          (
-            options.tabId ||
-            activeTabId
-          )
-      );
-
-
-    if (!tab) {
-      return;
-    }
-
-
-    const token =
-      ++tab.currentToken;
-
-
-    setLoading(true);
-
-
-    urlInput.value =
-      url;
-
-
-    /*
-     * Remove previous iframe.
-     */
-
-    viewport
-      .querySelectorAll(
-        "iframe, .placeholder, .blocked-msg"
-      )
-      .forEach(
-        el =>
-          el.remove()
-      );
-
-
-    /*
-     * Create iframe.
-     */
-
-    const iframe =
-      document.createElement(
-        "iframe"
-      );
-
-
-    /*
-     * Important:
-     *
-     * These permissions are needed by modern websites,
-     * video players, games, fullscreen applications,
-     * etc.
-     */
-
-    iframe.setAttribute(
-      "sandbox",
-      [
-        "allow-scripts",
-        "allow-same-origin",
-        "allow-forms",
-        "allow-popups",
-        "allow-popups-to-escape-sandbox",
-        "allow-presentation",
-        "allow-modals",
-        "allow-downloads",
-        "allow-pointer-lock",
-        "allow-top-navigation-by-user-activation"
-      ].join(" ")
-    );
-
-
-    iframe.setAttribute(
-      "allow",
-      [
-        "autoplay",
-        "fullscreen",
-        "picture-in-picture",
-        "encrypted-media",
-        "accelerometer",
-        "gyroscope",
-        "gamepad",
-        "clipboard-read",
-        "clipboard-write",
-        "microphone",
-        "camera"
-      ].join("; ")
-    );
-
-
-    iframe.setAttribute(
-      "allowfullscreen",
-      ""
-    );
-
-
-    iframe.referrerPolicy =
-      "no-referrer";
-
-
-    /*
-     * The Worker handles:
-     *
-     * HTML
-     * JS
-     * CSS
-     * fetch
-     * XHR
-     * WebSocket
-     * video
-     * audio
-     * images
-     * redirects
-     * etc.
-     */
-
-    iframe.src =
-      proxiedUrl(url);
-
-
-    /*
-     * ----------------------------------------------------------
-     * Iframe load
-     * ----------------------------------------------------------
-     */
-
-    iframe.addEventListener(
-      "load",
-      () => {
-        if (
-          token !==
-          tab.currentToken
-        ) {
-          return;
-        }
-
-        if (
-          tab.id !==
-          activeTabId
-        ) {
-          return;
-        }
-
-        setLoading(false);
-
-        setStatus("");
-
-        /*
-         * We intentionally don't try to inspect iframe.location
-         * here because the iframe contains a sandboxed document.
-         *
-         * Navigation updates come from postMessage.
-         */
-      }
-    );
-
-
-    iframe.addEventListener(
-      "error",
-      () => {
-        if (
-          token !==
-          tab.currentToken
-        ) {
-          return;
-        }
-
-        showErrorMessage(
-          url,
-          "The proxy returned a network error."
-        );
-      }
-    );
-
-
-    /*
-     * ----------------------------------------------------------
-     * Insert iframe
-     * ----------------------------------------------------------
-     */
-
-    viewport.insertBefore(
-      iframe,
-      loadingOverlay
-    );
-
-
-    /*
-     * ----------------------------------------------------------
-     * History
-     * ----------------------------------------------------------
-     */
-
-    if (
-      !options.fromHistory &&
-      !options.fromProxyNavigation
-    ) {
-      /*
-       * Don't duplicate the current URL.
-       */
-
-      if (
-        tab.history[
-          tab.historyIndex
-        ] !== url
-      ) {
-        tab.history =
-          tab.history.slice(
-            0,
-            tab.historyIndex + 1
-          );
-
-        tab.history.push(
-          url
-        );
-
-        tab.historyIndex =
-          tab.history.length - 1;
-      }
-    }
-
-
-    updateTabTitle(
-      tab,
-      url
-    );
-
-    updateNavButtons();
   }
 
 
@@ -1769,11 +1250,11 @@ body {
 
   function createTab(
     url,
-    makeActive
+    makeActive = true
   ) {
+
     const id =
       nextTabId++;
-
 
     const normalized =
       url
@@ -1782,12 +1263,13 @@ body {
 
 
     const tab = {
+
       id,
 
       title:
         normalized
           ? siteLabel(normalized)
-          : "New Tab",
+          : 'New Tab',
 
       history:
         normalized
@@ -1799,28 +1281,26 @@ body {
           ? 0
           : -1,
 
-      currentToken:
-        0
+      currentToken: 0
+
     };
 
 
-    tabs.push(
-      tab
-    );
+    tabs.push(tab);
+
+    renderTabs();
 
 
-    if (
-      makeActive !== false
-    ) {
+    if (makeActive) {
+
       activeTabId =
         id;
 
       renderTabs();
 
 
-      if (
-        normalized
-      ) {
+      if (normalized) {
+
         loadUrl(
           normalized,
           {
@@ -1828,16 +1308,18 @@ body {
             tabId: id
           }
         );
+
       } else {
+
         showPlaceholder();
+
       }
 
-    } else {
-      renderTabs();
     }
 
 
     return tab;
+
   }
 
 
@@ -1848,16 +1330,13 @@ body {
    */
 
   function closeTab(id) {
+
     const index =
       tabs.findIndex(
-        t =>
-          t.id === id
+        tab => tab.id === id
       );
 
-
-    if (
-      index === -1
-    ) {
+    if (index === -1) {
       return;
     }
 
@@ -1872,21 +1351,20 @@ body {
     );
 
 
-    if (
-      !tabs.length
-    ) {
+    if (!tabs.length) {
+
       createTab(
         null,
         true
       );
 
       return;
+
     }
 
 
-    if (
-      wasActive
-    ) {
+    if (wasActive) {
+
       const next =
         tabs[
           Math.max(
@@ -1900,31 +1378,37 @@ body {
       activeTabId =
         next.id;
 
-
       renderTabs();
 
 
-      const current =
+      const currentUrl =
         next.history[
           next.historyIndex
         ];
 
 
-      if (current) {
+      if (currentUrl) {
+
         loadUrl(
-          current,
+          currentUrl,
           {
             fromHistory: true,
             tabId: next.id
           }
         );
+
       } else {
+
         showPlaceholder();
+
       }
 
     } else {
+
       renderTabs();
+
     }
+
   }
 
 
@@ -1935,12 +1419,11 @@ body {
    */
 
   function switchTab(id) {
+
     const tab =
       tabs.find(
-        t =>
-          t.id === id
+        t => t.id === id
       );
-
 
     if (!tab) {
       return;
@@ -1950,63 +1433,51 @@ body {
     activeTabId =
       id;
 
-
     renderTabs();
 
 
-    const current =
+    const url =
       tab.history[
         tab.historyIndex
       ];
 
 
-    if (current) {
+    if (url) {
+
       loadUrl(
-        current,
+        url,
         {
           fromHistory: true,
           tabId: id
         }
       );
+
     } else {
+
       showPlaceholder();
+
     }
+
   }
 
 
   /*
    * ============================================================
-   * INPUT NAVIGATION
+   * LOAD URL
    * ============================================================
    */
 
-  function goFromInput() {
-    const value =
-      urlInput.value.trim();
-
-
-    if (!value) {
-      return;
-    }
-
-
-    /*
-     * Basic search support:
-     *
-     * typing "cats" becomes a Google search.
-     */
-
-    let url =
-      normalizeUrl(value);
-
-
-    if (!url) {
-      return;
-    }
-
+  function loadUrl(
+    url,
+    opts = {}
+  ) {
 
     const tab =
-      activeTab();
+      tabs.find(
+        t =>
+          t.id ===
+          (opts.tabId || activeTabId)
+      );
 
 
     if (!tab) {
@@ -2014,18 +1485,287 @@ body {
     }
 
 
-    loadUrl(
+    const token =
+      ++tab.currentToken;
+
+
+    setStatus(
+      'loading'
+    );
+
+
+    urlInput.value =
+      url;
+
+
+    if (
+      !PROXY_ORIGIN ||
+      PROXY_ORIGIN.includes(
+        'YOUR-SUBDOMAIN'
+      )
+    ) {
+
+      showErrorMessage(
+        url,
+        'Proxy is not configured'
+      );
+
+      return;
+
+    }
+
+
+    if (
+      tab.id !== activeTabId
+    ) {
+
+      return;
+
+    }
+
+
+    viewport.innerHTML = '';
+
+
+    /*
+     * IMPORTANT:
+     *
+     * We intentionally do NOT use:
+     *
+     * allow-top-navigation
+     *
+     * because that would allow the proxied website to escape
+     * the sandbox.
+     *
+     * The Worker rewrites navigation back through itself.
+     */
+
+    const iframe =
+      document.createElement(
+        'iframe'
+      );
+
+
+    iframe.setAttribute(
+      'sandbox',
+      [
+        'allow-scripts',
+        'allow-same-origin',
+        'allow-forms',
+        'allow-popups',
+        'allow-popups-to-escape-sandbox',
+        'allow-presentation',
+        'allow-modals',
+        'allow-downloads',
+        'allow-pointer-lock'
+      ].join(' ')
+    );
+
+
+    /*
+     * Browser capabilities.
+     *
+     * WebGL/game support:
+     *   WebGL
+     *   pointer lock
+     *   gamepad
+     *
+     * Video:
+     *   autoplay
+     *   fullscreen
+     *   picture-in-picture
+     *   encrypted media
+     *
+     * Modern applications:
+     *   microphone
+     *   camera
+     *   accelerometer
+     *   gyroscope
+     */
+
+    iframe.setAttribute(
+      'allow',
+      [
+        'autoplay',
+        'fullscreen',
+        'picture-in-picture',
+        'encrypted-media',
+        'accelerometer',
+        'gyroscope',
+        'gamepad',
+        'microphone',
+        'camera',
+        'clipboard-read',
+        'clipboard-write'
+      ].join('; ')
+    );
+
+
+    iframe.setAttribute(
+      'allowfullscreen',
+      ''
+    );
+
+
+    iframe.setAttribute(
+      'webkitallowfullscreen',
+      ''
+    );
+
+
+    iframe.setAttribute(
+      'mozallowfullscreen',
+      ''
+    );
+
+
+    /*
+     * Avoid leaking the parent page's referrer.
+     */
+
+    iframe.referrerPolicy =
+      'no-referrer';
+
+
+    /*
+     * IMPORTANT:
+     *
+     * The Worker receives the REAL target URL here.
+     *
+     * Example:
+     *
+     * https://krunker.io/?game=...
+     *
+     * becomes:
+     *
+     * https://sandbox-browser-proxy...
+     * /proxy?url=https%3A...
+     */
+
+    iframe.src =
+      proxiedUrl(url);
+
+
+    iframe.addEventListener(
+      'load',
+      function () {
+
+        if (
+          token !==
+            tab.currentToken ||
+          tab.id !==
+            activeTabId
+        ) {
+          return;
+        }
+
+        setStatus(
+          'success'
+        );
+
+      }
+    );
+
+
+    iframe.addEventListener(
+      'error',
+      function () {
+
+        if (
+          token !==
+            tab.currentToken ||
+          tab.id !==
+            activeTabId
+        ) {
+          return;
+        }
+
+        showErrorMessage(
+          url,
+          'Network error'
+        );
+
+      }
+    );
+
+
+    viewport.appendChild(
+      iframe
+    );
+
+
+    /*
+     * Add navigation to this tab's history.
+     */
+
+    if (!opts.fromHistory) {
+
+      tab.history =
+        tab.history.slice(
+          0,
+          tab.historyIndex + 1
+        );
+
+
+      tab.history.push(
+        url
+      );
+
+
+      tab.historyIndex =
+        tab.history.length - 1;
+
+    }
+
+
+    updateTabTitle(
+      tab,
       url
     );
+
+    updateNavButtons();
+
+  }
+
+
+  /*
+   * ============================================================
+   * URL INPUT
+   * ============================================================
+   */
+
+  function goFromInput() {
+
+    const url =
+      normalizeUrl(
+        urlInput.value
+      );
+
+
+    if (!url) {
+
+      setStatus(
+        'error'
+      );
+
+      return;
+
+    }
+
+
+    loadUrl(url);
+
   }
 
 
   urlForm.addEventListener(
-    "submit",
-    event => {
+    'submit',
+    function (event) {
+
       event.preventDefault();
 
       goFromInput();
+
     }
   );
 
@@ -2037,8 +1777,9 @@ body {
    */
 
   backBtn.addEventListener(
-    "click",
-    () => {
+    'click',
+    function () {
+
       const tab =
         activeTab();
 
@@ -2059,10 +1800,10 @@ body {
           tab.historyIndex
         ],
         {
-          fromHistory: true,
-          tabId: tab.id
+          fromHistory: true
         }
       );
+
     }
   );
 
@@ -2074,8 +1815,9 @@ body {
    */
 
   forwardBtn.addEventListener(
-    "click",
-    () => {
+    'click',
+    function () {
+
       const tab =
         activeTab();
 
@@ -2097,10 +1839,10 @@ body {
           tab.historyIndex
         ],
         {
-          fromHistory: true,
-          tabId: tab.id
+          fromHistory: true
         }
       );
+
     }
   );
 
@@ -2112,32 +1854,31 @@ body {
    */
 
   reloadBtn.addEventListener(
-    "click",
-    () => {
+    'click',
+    function () {
+
       const tab =
         activeTab();
 
 
-      if (!tab) {
-        return;
-      }
-
-
-      const url =
+      if (
+        tab &&
         tab.history[
           tab.historyIndex
-        ];
+        ]
+      ) {
 
-
-      if (url) {
         loadUrl(
-          url,
+          tab.history[
+            tab.historyIndex
+          ],
           {
-            fromHistory: true,
-            tabId: tab.id
+            fromHistory: true
           }
         );
+
       }
+
     }
   );
 
@@ -2149,14 +1890,16 @@ body {
    */
 
   newTabBtn.addEventListener(
-    "click",
-    () => {
+    'click',
+    function () {
+
       createTab(
         null,
         true
       );
 
       urlInput.focus();
+
     }
   );
 
@@ -2168,63 +1911,83 @@ body {
    */
 
   fullscreenBtn.addEventListener(
-    "click",
-    async () => {
+    'click',
+    async function () {
+
       try {
+
         if (
           document.fullscreenElement
         ) {
+
           await document.exitFullscreen();
+
         } else {
+
           await browser.requestFullscreen();
+
         }
-      } catch {}
+
+      } catch (error) {
+
+        console.warn(
+          'Fullscreen unavailable:',
+          error
+        );
+
+      }
+
     }
   );
 
 
   document.addEventListener(
-    "fullscreenchange",
-    () => {
+    'fullscreenchange',
+    function () {
+
       if (
         document.fullscreenElement
       ) {
+
         fullscreenBtn.textContent =
-          "⤢";
+          '⤢';
 
         fullscreenBtn.title =
-          "Exit fullscreen";
+          'Exit fullscreen';
+
       } else {
+
         fullscreenBtn.textContent =
-          "⛶";
+          '⛶';
 
         fullscreenBtn.title =
-          "Fullscreen";
+          'Fullscreen';
+
       }
+
     }
   );
 
 
   /*
    * ============================================================
-   * MESSAGES FROM THE PROXY PAGE
+   * WORKER -> PARENT MESSAGES
    * ============================================================
+   *
+   * Your Worker injects:
+   *
+   * window.parent.postMessage({
+   *   type: 'sandbox-new-tab',
+   *   url: ...
+   * }, '*');
+   *
+   * This listener is what actually turns that request
+   * into a new browser tab in our UI.
    */
 
   window.addEventListener(
-    "message",
-    event => {
-      /*
-       * We only trust messages from our own proxy.
-       */
-
-      if (
-        event.origin !==
-        PROXY_ORIGIN
-      ) {
-        return;
-      }
-
+    'message',
+    function (event) {
 
       const data =
         event.data;
@@ -2232,157 +1995,86 @@ body {
 
       if (
         !data ||
-        typeof data !==
-          "object"
+        data.type !==
+          'sandbox-new-tab'
       ) {
         return;
       }
 
 
-      const tab =
-        activeTab();
-
-
-      if (!tab) {
+      if (
+        !data.url ||
+        typeof data.url !==
+          'string'
+      ) {
         return;
       }
+
+
+      let url =
+        data.url;
 
 
       /*
-       * --------------------------------------------------------
-       * Navigation
+       * The Worker may already send us a proxied URL.
        *
-       * The Worker sends:
-       *
-       * {
-       *   type: "sandbox-navigation",
-       *   url: "..."
-       * }
-       * --------------------------------------------------------
+       * Convert it back to the original target URL when
+       * possible so our tab history stays clean.
        */
 
-      if (
-        data.type ===
-        "sandbox-navigation"
-      ) {
-        const realUrl =
-          unwrapProxyUrl(
-            data.url
-          );
+      try {
 
+        const received =
+          new URL(url);
 
-        const normalized =
-          normalizeUrl(
-            realUrl
-          );
-
-
-        if (!normalized) {
-          return;
-        }
-
-
-        /*
-         * Ignore duplicate navigation reports.
-         */
 
         if (
-          tab.history[
-            tab.historyIndex
-          ] === normalized
+          received.origin ===
+          PROXY_ORIGIN &&
+          received.pathname ===
+          '/proxy'
         ) {
-          updateTabTitle(
-            tab,
-            normalized,
-            data.title
-          );
 
-          urlInput.value =
-            normalized;
+          const target =
+            received.searchParams.get(
+              'url'
+            );
 
-          return;
+
+          if (target) {
+
+            url =
+              target;
+
+          }
+
         }
 
+      } catch (error) {
 
-        /*
-         * If this is a genuine navigation,
-         * append it to browser history.
-         */
+        return;
 
-        tab.history =
-          tab.history.slice(
-            0,
-            tab.historyIndex + 1
-          );
+      }
 
 
-        tab.history.push(
-          normalized
-        );
+      url =
+        normalizeUrl(url);
 
 
-        tab.historyIndex =
-          tab.history.length - 1;
-
-
-        updateTabTitle(
-          tab,
-          normalized,
-          data.title
-        );
-
-
-        urlInput.value =
-          normalized;
-
-
-        updateNavButtons();
-
+      if (!url) {
         return;
       }
 
 
       /*
-       * --------------------------------------------------------
-       * New tab
-       *
-       * window.open() in the Worker-injected page sends:
-       *
-       * {
-       *   type: "sandbox-new-tab",
-       *   url: "..."
-       * }
-       * --------------------------------------------------------
+       * Open the requested popup as a new sandbox tab.
        */
 
-      if (
-        data.type ===
-        "sandbox-new-tab"
-      ) {
-        const realUrl =
-          unwrapProxyUrl(
-            data.url
-          );
+      createTab(
+        url,
+        true
+      );
 
-
-        const normalized =
-          normalizeUrl(
-            realUrl
-          );
-
-
-        if (!normalized) {
-          return;
-        }
-
-
-        createTab(
-          normalized,
-          true
-        );
-
-        return;
-      }
     }
   );
 
@@ -2394,8 +2086,9 @@ body {
    */
 
   document.addEventListener(
-    "keydown",
-    event => {
+    'keydown',
+    function (event) {
+
       const modifier =
         event.ctrlKey ||
         event.metaKey;
@@ -2408,15 +2101,15 @@ body {
       if (
         modifier &&
         event.key.toLowerCase() ===
-          "l"
+          'l'
       ) {
+
         event.preventDefault();
 
         urlInput.focus();
 
         urlInput.select();
 
-        return;
       }
 
 
@@ -2427,8 +2120,9 @@ body {
       if (
         modifier &&
         event.key.toLowerCase() ===
-          "t"
+          't'
       ) {
+
         event.preventDefault();
 
         createTab(
@@ -2436,7 +2130,6 @@ body {
           true
         );
 
-        return;
       }
 
 
@@ -2447,86 +2140,92 @@ body {
       if (
         modifier &&
         event.key.toLowerCase() ===
-          "w"
+          'w'
       ) {
+
         event.preventDefault();
 
         closeTab(
           activeTabId
         );
 
-        return;
       }
 
 
       /*
-       * Alt + Left
+       * Ctrl/Cmd + R
        */
 
       if (
-        event.altKey &&
-        event.key ===
-          "ArrowLeft"
+        modifier &&
+        event.key.toLowerCase() ===
+          'r'
       ) {
+
         event.preventDefault();
 
-        backBtn.click();
+        const tab =
+          activeTab();
 
-        return;
+
+        if (
+          tab &&
+          tab.history[
+            tab.historyIndex
+          ]
+        ) {
+
+          loadUrl(
+            tab.history[
+              tab.historyIndex
+            ],
+            {
+              fromHistory: true
+            }
+          );
+
+        }
+
       }
 
-
-      /*
-       * Alt + Right
-       */
-
-      if (
-        event.altKey &&
-        event.key ===
-          "ArrowRight"
-      ) {
-        event.preventDefault();
-
-        forwardBtn.click();
-
-        return;
-      }
     }
   );
 
 
   /*
    * ============================================================
-   * AUTO FOCUS / FULLSCREEN
+   * DRAG / RESIZE FRIENDLY BEHAVIOR
    * ============================================================
+   *
+   * The browser itself is 100% wide/high and uses flexbox,
+   * so if its parent is resized, the sandbox automatically
+   * follows the new dimensions.
    */
 
-  let fullscreenAttempted =
-    false;
-
-
-  browser.addEventListener(
-    "pointerdown",
-    () => {
-      if (
-        fullscreenAttempted
-      ) {
-        return;
-      }
-
-      fullscreenAttempted =
-        true;
-
+  window.addEventListener(
+    'resize',
+    function () {
 
       /*
-       * We don't force fullscreen automatically anymore.
-       *
-       * The browser can deny fullscreen if the page is embedded
-       * in another iframe.
+       * Force iframe to recalculate its layout.
        */
-    },
-    {
-      once: true
+
+      const iframe =
+        viewport.querySelector(
+          'iframe'
+        );
+
+
+      if (iframe) {
+
+        iframe.style.height =
+          '100%';
+
+        iframe.style.width =
+          '100%';
+
+      }
+
     }
   );
 
