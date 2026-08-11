@@ -2,7 +2,7 @@
  * Service Worker Proxy Configuration
  */
 
-const WORKER_URL = "https://your-worker-name.subdomain.workers.dev";
+const WORKER_URL = "sandbox-browser-proxy.the-troy-place.workers.dev";
 
 self.addEventListener('install', () => self.skipWaiting());
 self.addEventListener('activate', (e) => e.waitUntil(self.clients.claim()));
