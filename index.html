@@ -27,10 +27,12 @@
   </div>
 
   <script>
-    // Register Service Worker on load
+    // REPLACE THIS WITH YOUR CLOUDFLARE WORKER URL
+    const WORKER_URL = "https://your-worker-name.subdomain.workers.dev";
+
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js', { scope: '/' })
-        .then(() => console.log('Proxy Service Worker successfully registered.'))
+        .then(() => console.log('Proxy Service Worker registered'))
         .catch(err => console.error('Service Worker Registration Failed:', err));
     }
 
@@ -43,7 +45,7 @@
         targetUrl = 'https://' + targetUrl;
       }
 
-      const proxyUrl = window.location.origin + '/proxy?url=' + encodeURIComponent(targetUrl);
+      const proxyUrl = WORKER_URL + '/proxy?url=' + encodeURIComponent(targetUrl);
       document.getElementById('sandbox-frame').src = proxyUrl;
     }
 
